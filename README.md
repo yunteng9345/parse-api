@@ -3,7 +3,7 @@
 
 ## Parse-Api是通过选取doc文件或docx文件，根据文档中的接口表单内容和GUI输入的一些参数信息，自动生成java实体类文件到指定的文件夹下的代码生成工具
 
-<div align=center>![image text](../img/screen1.png)
+<div align=center>![image text](https://github.com/yunteng9345/parse-api/blob/main/img/screen1.png)
 
 目前仅仅支持doc和docx，pdf和网页版后续看情况优化
 
