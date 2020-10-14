@@ -11,8 +11,6 @@ import win32com.client as wc
 
 base = Tk()
 base.title("api接口解析生成java类文件工具")
-base.iconbitmap('D:\python-project\parse-api\cat.ico')
-# Create a canvas
 base.geometry('900x900')
 
 
