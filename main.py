@@ -33,6 +33,7 @@ def doc2docx(file):
     doc.Close
     word.Quit
 
+
 def start_generate_file(file_and_target_path, param_sort, channel_name_and_coder_name, api_name, flag_name):
     description = ["极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类",
                    "极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类",
@@ -55,6 +56,18 @@ def start_generate_file(file_and_target_path, param_sort, channel_name_and_coder
                     api_name, file_and_target_path[1], flag_name, param_sort)
     messagebox.showinfo('提示', '生成成功，请到指定文件夹下查看')
     pass
+
+
+# 判断是否有下划线, 有的话转为驼峰格式
+def to_camel_case(snake_str):
+    if "_" in snake_str:
+        components = snake_str.split('_')
+        # We capitalize the first letter of each component except the first one
+        # with the 'title' method and join them together.
+        return components[0] + ''.join(x.title() for x in components[1:])
+    return snake_str
+
+
 # 解析docx文件
 def parse_docx_file(docx_file_path, channel_name, coder_name, description, class_name, target_directoy, flag_name,
                     param_sort):
@@ -70,7 +83,7 @@ def parse_docx_file(docx_file_path, channel_name, coder_name, description, class
                 annotation = "\t/** " + table.cell(i, int(param_sort[1]) - 1).text + ", " + table.cell(i,
                                                                                                        int(param_sort[
                                                                                                                2]) - 1).text + " **/ \n"
-                var = "\tprivate String " + table.cell(i, int(param_sort[0]) - 1).text + ";\n\n"
+                var = "\tprivate String " + to_camel_case(table.cell(i, int(param_sort[0]) - 1).text) + ";\n\n"
                 content += annotation + var
             all_content = head + content + end
             print(all_content)
@@ -103,6 +116,7 @@ def get_suffix(index):
 # 获取当前时间
 def get_current_time():
     return date.today().strftime("%B %d, %Y")
+
 
 file_path_name = StringVar()
 file_path = Button(base, text='1.---请选择要解析的doc或者docx接口文档---', command=lambda: get_file_path())

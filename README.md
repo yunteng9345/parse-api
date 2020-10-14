@@ -2,8 +2,15 @@
 # Parse-Api
 
 ![项目截图](cat.ico)
-## Parse-Api是通过选取doc文件或docx文件，根据文档中的接口表单内容和GUI输入的一些参数信息，自动生成java实体类文件到指定的文件夹下的代码生成工具
+##### Parse-Api是通过选取doc文件或docx文件，根据文档中的接口表单内容和GUI输入的一些参数信息，自动生成java实体类文件到指定的文件夹下的代码生成工具
 
+#Update log
+
+15 October 2020 update record
+1. covert it to snake case when variable is camel.
+2. add test.py file
+
+***
 ### <div align=center>![项目截图](screen1.png)
 
 目前仅仅支持doc和docx，pdf和网页版后续看情况优化
