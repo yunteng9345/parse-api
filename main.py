@@ -1,7 +1,5 @@
-import tkinter
 from tkinter import *
 from tkinter import filedialog
-import time
 from tkinter import messagebox
 import codecs
 from docx import Document  # 导入库
@@ -35,16 +33,12 @@ def doc2docx(file):
 
 
 def start_generate_file(file_and_target_path, param_sort, channel_name_and_coder_name, api_name, flag_name):
-    description = ["极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类",
-                   "极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类",
-                   "极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类"]
+    description = [""]
     # 如果是doc文件的话转换成docx文件后在进行处理
     if str(file_and_target_path[0]).endswith(".doc"):
         doc2docx(file_and_target_path[0])
-        print("开始睡眠")
-        time.sleep(6)
-        print("停止睡眠")
-    print(file_and_target_path)
+        file_and_target_path[0] = file_and_target_path[0] + "x"
+    print(file_and_target_path[0])
     print(param_sort)
     print(channel_name_and_coder_name)
     print(api_name)
@@ -108,6 +102,7 @@ def generate_class_content(coder_name, index, description, class_name, channel_n
     return content, end, head
 
 
+# Request和Response后缀循环生成
 def get_suffix(index):
     suffix = "Request" if index % 2 == 0 else "Response"
     return suffix
@@ -185,7 +180,7 @@ target_path.pack()
 e1 = Entry(base, state='readonly', text=target_path_name, width=80)
 e1.pack()
 
-submit = Button(base, text='--启动--',
+submit = Button(base, text='--生成--',
                 command=lambda: start_generate_file([e2.get(), e1.get()],
                                                     [en_param.get(), ch_param.get(), explain.get()],
                                                     [channel_name.get(), coder_name.get()],
