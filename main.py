@@ -1,12 +1,11 @@
-import tkinter
 from tkinter import *
 from tkinter import filedialog
-import time
 from tkinter import messagebox
 import codecs
 from docx import Document  # 导入库
 from datetime import date
-
+import glob
+import os
 import win32com.client as wc
 
 base = Tk()
@@ -34,21 +33,32 @@ def doc2docx(file):
     word.Quit
 
 
+def pdf_to_docx(pdfs_path):
+    word = wc.Dispatch("Word.Application")
+    word.visible = 0
+    for i, doc in enumerate(glob.iglob(pdfs_path)):
+        filename = doc.split('\\')[-1]
+        filepath = doc.replace(filename, "")
+        in_file = os.path.abspath(doc)
+        wb = word.Documents.Open(in_file)
+        out_file = os.path.abspath(filepath + filename[0:-4] + ".docx".format(i))
+        print("outfile\n", out_file)
+        wb.SaveAs2(out_file, FileFormat=16)  # file format for docx
+        print("pdf to docx success...")
+        wb.Close()
+    word.Quit()
+
+
 def start_generate_file(file_and_target_path, param_sort, channel_name_and_coder_name, api_name, flag_name):
-    description = ["极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类",
-                   "极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类",
-                   "极易付小额支付请求类", "极易付小额支付响应类", "极易付查询请求类", "极易付查询响应类"]
-    # 如果是doc文件的话转换成docx文件后在进行处理
+    description = [""]
+    # 如果是doc文件转换成docx文件后在进行处理
     if str(file_and_target_path[0]).endswith(".doc"):
         doc2docx(file_and_target_path[0])
-        print("开始睡眠")
-        time.sleep(6)
-        print("停止睡眠")
-    print(file_and_target_path)
-    print(param_sort)
-    print(channel_name_and_coder_name)
-    print(api_name)
-    print(flag_name)
+        file_and_target_path[0] = file_and_target_path[0] + "x"
+    # 如果是pdf文转换成docx文件后在进行处理件
+    if str(file_and_target_path[0]).endswith(".pdf"):
+        pdf_to_docx(file_and_target_path[0])
+        file_and_target_path[0] = str(file_and_target_path[0]).replace("pdf", "docx")
 
     # 进入doc解析核心处理
     parse_docx_file(file_and_target_path[0], channel_name_and_coder_name[0], channel_name_and_coder_name[1],
@@ -71,6 +81,7 @@ def to_camel_case(snake_str):
 # 解析docx文件
 def parse_docx_file(docx_file_path, channel_name, coder_name, description, class_name, target_directoy, flag_name,
                     param_sort):
+    print("parse_docx_file :" + docx_file_path)
     document = Document(docx_file_path)  # 读入文件
     tables = document.tables  # 获取文件中的表格集
     index = 0
@@ -108,6 +119,7 @@ def generate_class_content(coder_name, index, description, class_name, channel_n
     return content, end, head
 
 
+# Request和Response后缀循环生成
 def get_suffix(index):
     suffix = "Request" if index % 2 == 0 else "Response"
     return suffix
@@ -185,7 +197,7 @@ target_path.pack()
 e1 = Entry(base, state='readonly', text=target_path_name, width=80)
 e1.pack()
 
-submit = Button(base, text='--启动--',
+submit = Button(base, text='--生成--',
                 command=lambda: start_generate_file([e2.get(), e1.get()],
                                                     [en_param.get(), ch_param.get(), explain.get()],
                                                     [channel_name.get(), coder_name.get()],

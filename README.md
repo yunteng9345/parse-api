@@ -7,8 +7,10 @@
 #Update log
 
 15 October 2020 update record
-1. covert it to snake case when variable is camel.
-2. add test.py file
+1. Covert it to snake case when variable is camel.
+2. Add test.py file
+3. Support pdf file
+4. Fixed doc file selection twice
 
 ***
 ### <div align=center>![项目截图](screen1.png)
