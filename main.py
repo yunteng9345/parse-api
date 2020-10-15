@@ -131,7 +131,7 @@ def get_current_time():
 
 
 file_path_name = StringVar()
-file_path = Button(base, text='1.---请选择要解析的doc或者docx接口文档---', command=lambda: get_file_path())
+file_path = Button(base, text='1.---请选择doc/docx/pdf接口文档---', command=lambda: get_file_path())
 file_path.pack()
 e2 = Entry(base, state='readonly', text=file_path_name, width=80)
 e2.pack()
