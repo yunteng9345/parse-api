@@ -5,6 +5,8 @@
 ##### Parse-Api是通过选取doc文件或docx文件，根据文档中的接口表单内容和GUI输入的一些参数信息，自动生成java实体类文件到指定的文件夹下的代码生成工具
 
 #Update log
+16October 2020 update log
+1. add Add a format checkbutton judgment
 
 15 October 2020 update record
 1. Covert it to snake case when variable is camel.

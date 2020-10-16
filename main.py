@@ -49,7 +49,8 @@ def pdf_to_docx(pdfs_path):
     word.Quit()
 
 
-def start_generate_file(file_and_target_path, param_sort, channel_name_and_coder_name, api_name, flag_name):
+def start_generate_file(file_and_target_path, param_sort, channel_name_and_coder_name, api_name, flag_name, is_snake_case):
+    print(is_snake_case)
     description = [""]
     # 如果是doc文件转换成docx文件后在进行处理
     if str(file_and_target_path[0]).endswith(".doc"):
@@ -63,24 +64,25 @@ def start_generate_file(file_and_target_path, param_sort, channel_name_and_coder
     # 进入doc解析核心处理
     parse_docx_file(file_and_target_path[0], channel_name_and_coder_name[0], channel_name_and_coder_name[1],
                     description,
-                    api_name, file_and_target_path[1], flag_name, param_sort)
+                    api_name, file_and_target_path[1], flag_name, param_sort, is_snake_case)
     messagebox.showinfo('提示', '生成成功，请到指定文件夹下查看')
     pass
 
 
 # 判断是否有下划线, 有的话转为驼峰格式
-def to_camel_case(snake_str):
-    if "_" in snake_str:
-        components = snake_str.split('_')
-        # We capitalize the first letter of each component except the first one
-        # with the 'title' method and join them together.
-        return components[0] + ''.join(x.title() for x in components[1:])
+def to_camel_case(snake_str, is_snake_case):
+    if str(is_snake_case) == "1":
+        if "_" in snake_str:
+            components = snake_str.split('_')
+            # We capitalize the first letter of each component except the first one
+            # with the 'title' method and join them together.
+            return components[0] + ''.join(x.title() for x in components[1:])
     return snake_str
 
 
 # 解析docx文件
 def parse_docx_file(docx_file_path, channel_name, coder_name, description, class_name, target_directoy, flag_name,
-                    param_sort):
+                    param_sort, is_snake_case):
     print("parse_docx_file :" + docx_file_path)
     document = Document(docx_file_path)  # 读入文件
     tables = document.tables  # 获取文件中的表格集
@@ -94,7 +96,7 @@ def parse_docx_file(docx_file_path, channel_name, coder_name, description, class
                 annotation = "\t/** " + table.cell(i, int(param_sort[1]) - 1).text + ", " + table.cell(i,
                                                                                                        int(param_sort[
                                                                                                                2]) - 1).text + " **/ \n"
-                var = "\tprivate String " + to_camel_case(table.cell(i, int(param_sort[0]) - 1).text) + ";\n\n"
+                var = "\tprivate String " + to_camel_case(table.cell(i, int(param_sort[0]) - 1).text, is_snake_case) + ";\n\n"
                 content += annotation + var
             all_content = head + content + end
             print(all_content)
@@ -191,6 +193,10 @@ L7.pack()
 api_name5 = Entry(base, bd=5)
 api_name5.pack()
 
+CheckVar1 = IntVar()
+C1 = Checkbutton(base, text="是否将下划线转成驼峰", variable=CheckVar1, onvalue=1, offvalue=0, height=5, width=20)
+C1.pack()
+
 target_path_name = StringVar()
 target_path = Button(base, text='2.---请选择java文件生成的位置---', command=lambda: get_target_path())
 target_path.pack()
@@ -203,7 +209,7 @@ submit = Button(base, text='--生成--',
                                                     [channel_name.get(), coder_name.get()],
                                                     [api_name1.get(), api_name1.get(), api_name2.get(), api_name2.get(),
                                                      api_name3.get(), api_name3.get(), api_name4.get(), api_name4.get(),
-                                                     api_name5.get(), api_name5.get()], flag_name.get()))
+                                                     api_name5.get(), api_name5.get()], flag_name.get(), CheckVar1.get()))
 
 submit.pack()
 
