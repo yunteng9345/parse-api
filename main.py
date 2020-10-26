@@ -108,7 +108,7 @@ def parse_docx_file(docx_file_path, channel_name, coder_name, description, class
 # 将生成的文件输出到指定路径下
 def output_java_file(all_content, class_name, index, target_directoy, channel_name):
     file_name = target_directoy + "/" + channel_name + class_name[index] + get_suffix(index) + '.java'
-    file = codecs.open(file_name, "w", "utf-8-sig")
+    file = codecs.open(file_name, "w", "utf-8")
     file.write(all_content)
 
 

@@ -22,4 +22,4 @@ def pdf_to_docx(pdfs_path):
     word.Quit()
 
 
-pdf_to_docx("D:\\parse-api\\file\\a.pdf")
+pdf_to_docx("D:\\文档\\澳门码付互联互通\\澳门国际银行扫码支付技术规范V1.2.pdf")
